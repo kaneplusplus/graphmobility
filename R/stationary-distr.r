@@ -11,7 +11,7 @@ stationary_distr <- function(P,
                   partial(eigs, k = 20),
                   eigen)) {
 
-  v <- suppressWarnings(.eigen(t(P), symmetric = FALSE)$vectors)
+  v <- .eigen(t(P), symmetric = FALSE)$vectors
   vn <- colSums(v)
 
   v <- sweep(v, 2, vn, FUN = "/")

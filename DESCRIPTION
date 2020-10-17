@@ -7,7 +7,7 @@ Authors@R: c(
     email = "michael.kane@yale.edu",
     comment = c(ORCID = "http://orcid.org/0000-0003-1899-6662")
     ))
-Description: Tools for Analyzing Mobility Graphs
+Description: Tools for analyzing mobility graphs.
 License: Apache License (>= 2.0)
 Encoding: UTF-8
 LazyData: true
@@ -17,9 +17,10 @@ Imports:
   RSpectra,
   purrr
 Suggests:
-  testthat,
-  rmarkdown,
-  knitr
+    testthat,
+    rmarkdown,
+    knitr,
+    covr
 URL: https://github.com/kaneplusplus/graphmobility
 BugReports: https://github.com/kaneplusplus/graphmobility/issues
 VignetteBuilder: knitr
