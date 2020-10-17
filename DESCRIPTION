@@ -1,5 +1,5 @@
 Package: graphmobility
-Title: Tools for Analyzing Mobility Graphs
+Title: Tools to Analyze Mobility Graphs
 Version: 0.0.1
 Authors@R: c(
   person("Michael J.", "Kane",
