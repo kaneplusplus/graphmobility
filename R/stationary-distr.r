@@ -34,7 +34,7 @@ stationary_distr <- function(P, make_hollow = FALSE) {
 
 #' @importFrom Matrix rowSums
 #' @export
-ptm_sinks_rows <- function(P) {
+ptm_sink_rows <- function(P) {
   which(Matrix::rowSums(P) == 1)
 }
 
