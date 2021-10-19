@@ -5,32 +5,66 @@
 #' default, when the matrix is small the full eigenvalue decomposition is 
 #' peformed. Whe the matrix is large, only the leading 20 eigen vectors are 
 #' calculated.
-#' @param tol the numerical tolerance. Default 1e-12.
-#' @importFrom RSpectra eigs
-#' @importFrom Matrix rowSums diag crossprod tcrossprod sparseMatrix
-#' @importFrom purrr partial
-#' @importFrom stats optimize optim
+#' @importFrom Matrix sparseMatrix
+#' @importFrom CVXR Variable Minimize Problem solve
 #' @export
-stationary_distr <- function(P, make_hollow = FALSE) {
+#' @importFrom purrr partial
+#' @importFrom checkmate assert check_class
+stationary_distr <- function(P) {
 
-  if (make_hollow) {
-    I <- sparseMatrix(i = seq_len(nrow(P)),
+  assert(
+    check_class(P, "Matrix"),
+    check_class(P, "matrix"))
+
+  I <- sparseMatrix(i = seq_len(nrow(P)),
                       j = seq_len(ncol(P)),
-                      x = Matrix(diag(P)))
-    P <- P - I
-  }
-  if (length(find_ptm_sinks(P)) > 0) {
-    stop("Probability transition matrix has sinks.")
-  }
+                      x = rep(1, ncol(P))) 
+  B <- sparseMatrix(i = nrow(P) + 1, j = 1, x = c(rep(nrow(P), 0), 1))
+  A <- P - I
+  A <- rbind(
+    A, 
+    sparseMatrix(
+      i = rep(1, nrow(P)), 
+      j = seq_len(nrow(P)), 
+      x = rep(1, nrow(P))))
 
-  components(
-    graph_from_adjacency_matrix(P * 100, 
-                                mode = "directed",
-                                add.colnames = TRUE))
-  as.numeric(
-    Matrix::solve(crossprod(P), 
-                  tcrossprod(P,  rep(1/nrow(P), nrow(P)))))
+  pi <- Variable(ncol(A))
+  Ad <- as.matrix(A)
+  Bd <- as.matrix(B)
+  obj <- Minimize( sum((Ad %*% pi - Bd)^2) )
+  prob <- Problem(obj, constraints = list(pi >= 0))
+  ret <- solve(prob)
+  ret$getValue(pi)
 }
+
+#' @importFrom checkmate assert check_class
+prune_edges <- function(g, tresh = NULL) {
+
+  assert(
+    check_class(g, "igraph"),
+    is_directed(g),
+    combine = "and"
+  )
+
+  
+}
+
+#' @importFrom checkmate assert check_class
+num_clusters <- function(cg) {
+  assert(check_class(cg, "clusGap"))
+  tab <- cg$Tab
+  max_gap <- which.max(diff(tab[,"gap"])) + 1
+  mt <- tab[max_gap, , drop = FALSE]
+  tab <- tab[-max_gap, , drop = FALSE]
+  uppers <- tab[,"gap"] + 2 * (tab[,"SE.sim"] + mt[,"SE.sim"])
+  if (any(uppers >= mt[,"gap"])) {
+    warning("Gap separation is less than 2 sd.",
+            "Verify the number of clusters manually.")
+  }
+  max_gap
+}
+
+
 
 #' @importFrom Matrix rowSums
 #' @export
@@ -39,37 +73,41 @@ ptm_sink_rows <- function(P) {
 }
 
 #' Mobility Graph to Probability Transition Matrix
-#' @param mg the mobility graph.
+#' @param am the adjacency matrix.
 #' @importFrom foreach foreach %dopar% getDoParName registerDoSEQ
 #' @importFrom itertools isplitRows
 #' @importFrom Matrix rowSums diag
+#' @aliases am_to_ptm
 #' @export
-mg_to_ptm <- function(mg) {
+mg_to_ptm <- function(am) {
 
   if (is.null(getDoParName())) {
     registerDoSEQ()
   }
 
-  if (nrow(mg) > 100) {
+  if (nrow(am) > 100) {
     num_workers <- getDoParWorkers()
   } else{
     num_workers <- 1
   }
 
   ret <- 
-    foreach(mgs = isplitRows(mg, chunks = num_workers), 
+    foreach(ams = isplitRows(am, chunks = num_workers), 
             .combine = rbind) %dopar% {
-    ss <- Matrix::rowSums(mgs)
+    ss <- Matrix::rowSums(ams)
     foreach (i = seq_along(ss), .combine = rbind) %do% {  
       if (ss[i] == 0) {
-        mgs[i,, drop = FALSE]
+        ams[i,, drop = FALSE]
       } else {
-        mgs[i, ] <- mgs[i, , drop = FALSE] / ss[i]
-        mgs[i,, drop = FALSE]
+        ams[i, ] <- ams[i, , drop = FALSE] / ss[i]
+        ams[i,, drop = FALSE]
       }
     }
   }
-  #browser()
-  #ones <- which(Matrix::diag(ret) == Matrix::rowSums(ret))
+  dimnames(ret) <- dimnames(am)
   ret
 }
+
+#' @export
+am_to_ptm <- mg_to_ptm
+

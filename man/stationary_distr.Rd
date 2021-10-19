@@ -4,7 +4,7 @@
 \alias{stationary_distr}
 \title{Find the Stationary Distribution of a Markov Transition Matrix}
 \usage{
-stationary_distr(P, make_hollow = FALSE)
+stationary_distr(P)
 }
 \arguments{
 \item{P}{a Markov transition matrix.}
@@ -13,8 +13,6 @@ stationary_distr(P, make_hollow = FALSE)
 default, when the matrix is small the full eigenvalue decomposition is
 peformed. Whe the matrix is large, only the leading 20 eigen vectors are
 calculated.}
-
-\item{tol}{the numerical tolerance. Default 1e-12.}
 }
 \description{
 Find the Stationary Distribution of a Markov Transition Matrix

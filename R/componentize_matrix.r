@@ -17,7 +17,7 @@ componentize_matrix <-
   function(x, comp_name = "component", adj_mat_name = "adj_mat",
            size_name= "size") {
 
-  if (is.null(mg)) {
+  if (is.null(x)) {
     stop("No rownames or columns.")
   } else {
     rne <- dimnames(x)

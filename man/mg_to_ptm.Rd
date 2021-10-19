@@ -2,12 +2,13 @@
 % Please edit documentation in R/stationary-distr.r
 \name{mg_to_ptm}
 \alias{mg_to_ptm}
+\alias{am_to_ptm}
 \title{Mobility Graph to Probability Transition Matrix}
 \usage{
-mg_to_ptm(mg)
+mg_to_ptm(am)
 }
 \arguments{
-\item{mg}{the mobility graph.}
+\item{am}{the adjacency matrix.}
 }
 \description{
 Mobility Graph to Probability Transition Matrix
