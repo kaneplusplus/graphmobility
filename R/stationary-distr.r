@@ -1,5 +1,4 @@
 #' Find the Stationary Distribution of a Markov Transition Matrix
-#' @details Note that this 
 #' @param P a Markov transition matrix.
 #' @param .eigen the function to calculate the eigen vectors with. By 
 #' default, when the matrix is small the full eigenvalue decomposition is 
