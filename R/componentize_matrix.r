@@ -12,6 +12,7 @@
 #' @importFrom tibble tibble
 #' @importFrom itertools isplitVector
 #' @importFrom dplyr bind_rows
+#' @importFrom rlang :=
 #' @export
 componentize_matrix <- 
   function(x, comp_name = "component", adj_mat_name = "adj_mat",

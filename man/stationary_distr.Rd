@@ -7,16 +7,9 @@
 stationary_distr(P)
 }
 \arguments{
-\item{P}{a Markov transition matrix.}
-
-\item{.eigen}{the function to calculate the eigen vectors with. By
-default, when the matrix is small the full eigenvalue decomposition is
-peformed. Whe the matrix is large, only the leading 20 eigen vectors are
-calculated.}
+\item{P}{a Markov transition matrix. Rows correspond to the "from"
+vertex, columns correspond to the "to" vertex.}
 }
 \description{
 Find the Stationary Distribution of a Markov Transition Matrix
-}
-\details{
-Note that this
 }

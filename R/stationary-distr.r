@@ -1,19 +1,19 @@
 #' Find the Stationary Distribution of a Markov Transition Matrix
-#' @param P a Markov transition matrix.
-#' @param .eigen the function to calculate the eigen vectors with. By 
-#' default, when the matrix is small the full eigenvalue decomposition is 
-#' peformed. Whe the matrix is large, only the leading 20 eigen vectors are 
-#' calculated.
+#' @param P a Markov transition matrix. Rows correspond to the "from" 
+#' vertex, columns correspond to the "to" vertex.
 #' @importFrom Matrix sparseMatrix
 #' @importFrom CVXR Variable Minimize Problem solve
 #' @export
 #' @importFrom purrr partial
+#' @importFrom igraph is_directed
 #' @importFrom checkmate assert check_class
 stationary_distr <- function(P) {
 
   assert(
     check_class(P, "Matrix"),
     check_class(P, "matrix"))
+
+  P <- t(P)
 
   I <- sparseMatrix(i = seq_len(nrow(P)),
                       j = seq_len(ncol(P)),
@@ -66,14 +66,14 @@ num_clusters <- function(cg) {
 
 
 #' @importFrom Matrix rowSums
-#' @export
 ptm_sink_rows <- function(P) {
   which(Matrix::rowSums(P) == 1)
 }
 
 #' Mobility Graph to Probability Transition Matrix
 #' @param am the adjacency matrix.
-#' @importFrom foreach foreach %dopar% getDoParName registerDoSEQ
+#' @importFrom foreach foreach %dopar% getDoParName registerDoSEQ 
+#' getDoParWorkers %do%
 #' @importFrom itertools isplitRows
 #' @importFrom Matrix rowSums diag
 #' @aliases am_to_ptm
