@@ -8,6 +8,7 @@
 #' @param size_name the name of the column denoting the component size. Default 
 #' "size".
 #' @importFrom foreach foreach %dopar% getDoParName registerDoSEQ
+#' getDoParWorkers
 #' @importFrom igraph components graph_from_adjacency_matrix
 #' @importFrom tibble tibble
 #' @importFrom itertools isplitVector
