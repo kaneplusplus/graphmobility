@@ -1,4 +1,4 @@
-Package: graphmobility
+Package: graph.loci
 Title: Tools to Analyze Mobility Graphs
 Version: 0.1.0
 Authors@R: c(
@@ -6,12 +6,16 @@ Authors@R: c(
     role = c("aut", "cph", "cre"),
     email = "michael.kane@yale.edu",
     comment = c(ORCID = "http://orcid.org/0000-0003-1899-6662")
+  ),
+  person("Elena", "Khusainova",
+    role = c("ctb"),
+    email = "ek555g@att.com"
   ))
 Description: Tools for analyzing mobility graphs.
 License: Apache License (>= 2.0)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.3
 Depends:
   R (>= 4.0.0)
 Imports:
