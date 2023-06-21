@@ -8,7 +8,7 @@ Authors@R: c(
     comment = c(ORCID = "http://orcid.org/0000-0003-1899-6662")
   ),
   person("Elena", "Khusainova",
-    role = c("ctb"),
+    role = c("aut"),
     email = "ek555g@att.com"
   ))
 Description: Tools for analyzing mobility graphs.
